@@ -7,6 +7,7 @@ var logger = require('morgan');
 // config mongoose
 const mongoose = require('mongoose');
 require('./models/category');
+require('./models/product');
 
 var indexRouter = require('./routes/index');
 var usersRouter = require('./routes/users');
@@ -15,6 +16,10 @@ var productsRouter = require('./routes/products');
 // var usersRouter = require('./routes/users');
 
 var app = express();
+
+// cấu hình swagger
+const swaggerUi = require('swagger-ui-express');
+const swaggerDocument = require('./utils/config-swagger');
 
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));
@@ -31,6 +36,8 @@ mongoose.connect('mongodb+srv://tientqps27928:tqtienps27928@and103.mora3.mongodb
   .then(() => console.log('>>>>>>>>>> DB Connected!!!!!!'))
   .catch(err => console.log('>>>>>>>>> DB Error: ', err));
 
+  
+app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerDocument));
 app.use('/', indexRouter);
 app.use('/users', usersRouter);
 app.use('/categories', categoriesRouter);
