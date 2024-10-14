@@ -47,7 +47,7 @@ router.get("/", async function (req, res) {
     console.log("Request received at /products/list");
     // try {
     //     var list = await productModel.find();
-    //     res.status(200).json({ status: true, data: list });
+    res.status(200).json({ status: true });
     // } catch (e) {
     //     console.log("Error: ", e);
     //     res.status(400).json({ status: false, message: "Thất bại" });
