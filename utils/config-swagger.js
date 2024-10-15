@@ -7,6 +7,18 @@ const options = {
             version: '1.0.0',
             description: 'ASM swagger documentation',
         },
+        components: {
+            securitySchemes: {
+                bearerAuth: {
+                    type: 'http',
+                    scheme: 'bearer',
+                    bearerFormat: 'JWT',
+                }
+            }
+        },
+        security: [{
+            bearerAuth: []
+        }]
     },
     apis: ['./routes/*.js'], // Đường dẫn đến các file định nghĩa API
 };
