@@ -8,12 +8,15 @@ var logger = require('morgan');
 const mongoose = require('mongoose');
 require('./models/category');
 require('./models/product');
+require('./models/user');
+require('./models/size');
+require('./models/productSize');
 
 var indexRouter = require('./routes/index');
 var usersRouter = require('./routes/users');
 var categoriesRouter = require('./routes/categories');
 var productsRouter = require('./routes/products');
-var usersRouter = require('./routes/users');
+var sizesRouter = require('./routes/sizes');
 
 var app = express();
 
@@ -32,7 +35,8 @@ app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 
 //connect database
-mongoose.connect('mongodb+srv://tientqps27928:tqtienps27928@and103.mora3.mongodb.net/coffee_shop')
+// mongoose.connect('mongodb+srv://tientqps27928:tqtienps27928@and103.mora3.mongodb.net/coffee_shop')
+mongoose.connect('mongodb://localhost:27017/coffee_shop')
   .then(() => console.log('>>>>>>>>>> DB Connected!!!!!!'))
   .catch(err => console.log('>>>>>>>>> DB Error: ', err));
 
@@ -42,7 +46,7 @@ app.use('/', indexRouter);
 app.use('/users', usersRouter);
 app.use('/categories', categoriesRouter);
 app.use('/products', productsRouter);
-app.use('/users', usersRouter);
+app.use('/sizes', sizesRouter);
 
 // catch 404 and forward to error handler
 app.use(function (req, res, next) {
