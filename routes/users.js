@@ -49,7 +49,7 @@ router.get('/', async function (req, res) {
 
 /**
 * @swagger
-* /sign-in/:
+* /users/login/:
 *   post:
 *     summary: Đăng nhập tài khoản
 *     responses:
@@ -74,7 +74,7 @@ router.post('/login', async function (req, res) {
                 } else {
                     //xử lý chức năng tương ứng với API
                     const { email, password } = req.body;
-                    var checkUser = await userModel.find({ username: username, password: password });
+                    var checkUser = await userModel.find({ email: email, password: password });
                     if (checkUser) {
                         //Token người dùng sẽ sử dụng gửi lên trên header mỗi lần muốn gọi api
                         const token = JWT.sign({ id: email }, config.SECRETKEY, { expiresIn: '30s' });
@@ -98,7 +98,7 @@ router.post('/login', async function (req, res) {
 
 /**
 * @swagger
-* /sign-up/:
+* /users/register/:
 *   post:
 *     summary: Đăng ký tài khoản
 *     responses:
