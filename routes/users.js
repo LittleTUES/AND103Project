@@ -76,6 +76,8 @@ router.get('/', async function (req, res) {
  *         description: User không tồn tại
  */
 router.post('/login', async function (req, res) {
+    console.log('>>>>>>>>>>>>>>');
+    
     try {
         const { email, password } = req.body;
         var checkUser = await userModel.find({ email: email, password: password });
