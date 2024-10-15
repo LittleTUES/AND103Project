@@ -27,24 +27,24 @@ const config = require("../utils/config-env");
 *         description: jwt expired
 */
 router.get('/', async function (req, res) {
-  try {
-      const token = req.header("Authorization").split(' ')[1];
-      if (token) {
-          JWT.verify(token, config.SECRETKEY, async function (err, id) {
-              if (err) {
-                  res.status(403).json({ "status": 403, "err": err });
-              } else {
-                  //xử lý chức năng tương ứng với API
-                  var list = await userModel.find();
-                  res.status(200).json(list);
-              }
-          });
-      } else {
-          res.status(401).json({ "status": 401, message: "Unauthorized" });
-      }
-  } catch (err) {
-      res.status(400).json({ "status": 400, message: "Failed" });
-  }
+    try {
+        const token = req.header("Authorization").split(' ')[1];
+        if (token) {
+            JWT.verify(token, config.SECRETKEY, async function (err, id) {
+                if (err) {
+                    res.status(403).json({ "status": 403, "err": err });
+                } else {
+                    //xử lý chức năng tương ứng với API
+                    var list = await userModel.find();
+                    res.status(200).json(list);
+                }
+            });
+        } else {
+            res.status(401).json({ "status": 401, message: "Unauthorized" });
+        }
+    } catch (err) {
+        res.status(400).json({ "status": 400, message: "Failed" });
+    }
 });
 
 
