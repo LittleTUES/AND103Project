@@ -24,7 +24,10 @@ const config = require("../utils/config-env");
 */
 router.get('/', async function (req, res) {
     try {
-        const token = req.header("Authorization").split(' ')[1];
+        // const token = req.header("Authorization").split(' ')[1];
+        const authorizationHeader = req.header("Authorization");
+        console.log("Authorization Header: ", authorizationHeader);
+        const token = authorizationHeader.split(' ')[1];
         if (token) {
             JWT.verify(token, config.SECRETKEY, async function (err, id) {
                 if (err) {
