@@ -9,4 +9,3 @@ const product = new Schema({
     category: { type: ObjectId, ref: 'category' } //khóa ngoại
 });
 module.exports = mongoose.models.product || mongoose.model('product', product);
-// product -----> products
