@@ -95,6 +95,26 @@ router.post('/login', async function (req, res) {
     }
 });
 
+router.post('/sign-in', async function (req, res) {
+    console.log('>>>>>>>>>>>>>> In API'); // Kiểm tra log
+    console.log("SECRETKEY inside API: ", config.SECRETKEY); // Log để kiểm tra
+
+    try {
+        const { email, password } = req.body;
+        var checkUser = await userModel.findOne({ email: email, password: password });
+        if (checkUser) {
+            const token = JWT.sign({ id: checkUser._id }, config.SECRETKEY, { expiresIn: '30s' });
+            const refreshToken = JWT.sign({ id: checkUser._id }, config.SECRETKEY, { expiresIn: '1h' });
+            res.status(200).json({ status: true, message: "Đăng nhập thành công", token: token, refreshToken: refreshToken });
+        } else {
+            res.status(400).json({ status: false, message: "không tìm thấy user" });
+        }
+    } catch (error) {
+        console.log("Error: ", error);
+        res.status(400).json({ status: false, message: "Đăng nhập thất bại" });
+    }
+});
+
 /**
  * @swagger
  * /users/register/:
