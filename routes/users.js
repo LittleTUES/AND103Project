@@ -106,31 +106,16 @@ router.post('/login', async function (req, res) {
 *         description: Thành công
 *       400:
 *         description: Thất bại
-*       401:
-*         description: Không được phép truy cập
-*       403:
-*         description: jwt hết hạn
 */
 router.post('/register', async function (req, res) {
     try {
-        const token = req.header("Authorization").split(' ')[1];
-        if (token) {
-            JWT.verify(token, config.SECRETKEY, async function (err, id) {
-                if (err) {
-                    res.status(403).json({ "status": 403, "err": err });
-                } else {
-                    //xử lý chức năng tương ứng với API
-                    const { name, email, password } = req.body;
-                    const account = { name, email, password };
-                    await userModel.create(account);
-                    res.status(200).json({ status: true, message: "Create account successful" });
-                }
-            });
-        } else {
-            res.status(401).json({ "status": 401, message: "Unauthorized" });
-        }
+        //xử lý chức năng tương ứng với API
+        const { name, email, password } = req.body;
+        const account = { name, email, password };
+        await userModel.create(account);
+        res.status(200).json({ status: true, message: "Create account successful" });
     } catch (err) {
-        res.status(400).json({ "status": 400, message: "Failed" });
+        res.status(400).json({ "status": 400, message: "Failed: " + err });
     }
 });
 
