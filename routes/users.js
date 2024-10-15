@@ -48,37 +48,48 @@ router.get('/', async function (req, res) {
 });
 
 /**
-* @swagger
-* /users/login/:
-*   post:
-*     summary: Đăng nhập tài khoản
-*     responses:
-*       200:
-*         description: Thành công
-*       400:
-*         description: Thất bại
-*       401:
-*         description: Không được phép truy cập
-*       402:
-*         description: User không tồn tại
-*       403:
-*         description: jwt hết hạn
-*/
+ * @swagger
+ * /users/login/:
+ *   post:
+ *     summary: Đăng nhập tài khoản
+ *     description: Đăng nhập với email và password để nhận token và refresh token.
+ *     parameters:
+ *       - in: body
+ *         name: user
+ *         description: Thông tin đăng nhập người dùng
+ *         schema:
+ *           type: object
+ *           required:
+ *             - email
+ *             - password
+ *           properties:
+ *             email:
+ *               type: string
+ *             password:
+ *               type: string
+ *     responses:
+ *       200:
+ *         description: Thành công
+ *       400:
+ *         description: Thất bại
+ *       402:
+ *         description: User không tồn tại
+ */
 router.post('/login', async function (req, res) {
     try {
-        const { username, password } = req.body;
-        var checkUser = await userModel.find({ username: username, password: password });
+        const { email, password } = req.body;
+        var checkUser = await userModel.find({ email: email, password: password });
         if (checkUser) {
             //Token người dùng sẽ sử dụng gửi lên trên header mỗi lần muốn gọi api
-            const token = JWT.sign({ id: username }, config.SECRETKEY, { expiresIn: '30s' });
+            const token = JWT.sign({ id: email }, config.SECRETKEY, { expiresIn: '30s' });
             //Khi token hết hạn, người dùng sẽ call 1 api khác để lấy token mới
             //Lúc này người dùng sẽ truyền refreshToken lên để nhận về 1 cặp token, refreshToken mới
             //Nếu cả 2 token đều hết hạn người dùng sẽ phải thoát app và đăng nhập lại
 
-            const refreshToken = JWT.sign({ id: username }, config.SECRETKEY, { expiresIn: '1h' });
+            const refreshToken = JWT.sign({ id: email }, config.SECRETKEY, { expiresIn: '1h' });
             res.status(200).json({ status: true, message: "Log-in successful", token: token, refreshToken: refreshToken });
         } else {
-            res.status(400).json({ status: true, message: "User not found" });
+            res.status(402).json({ status: true, message: "User not found" });
         }
     } catch (error) {
         res.status(400).json({ status: true, message: "Log-in failed: " + error });
@@ -86,16 +97,34 @@ router.post('/login', async function (req, res) {
 });
 
 /**
-* @swagger
-* /users/register/:
-*   post:
-*     summary: Đăng ký tài khoản
-*     responses:
-*       200:
-*         description: Thành công
-*       400:
-*         description: Thất bại
-*/
+ * @swagger
+ * /users/register/:
+ *   post:
+ *     summary: Đăng ký tài khoản
+ *     description: Đăng ký tài khoản mới với thông tin người dùng.
+ *     parameters:
+ *       - in: body
+ *         name: user
+ *         description: Thông tin đăng ký người dùng
+ *         schema:
+ *           type: object
+ *           required:
+ *             - name
+ *             - email
+ *             - password
+ *           properties:
+ *             name:
+ *               type: string
+ *             email:
+ *               type: string
+ *             password:
+ *               type: string
+ *     responses:
+ *       200:
+ *         description: Thành công
+ *       400:
+ *         description: Thất bại
+ */
 router.post('/register', async function (req, res) {
     try {
         //xử lý chức năng tương ứng với API
