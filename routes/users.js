@@ -75,22 +75,22 @@ router.get('/', async function (req, res) {
  *         description: User không tồn tại
  */
 router.post('/login', async function (req, res) {
+    console.log('>>>>>>>>>>>>>> In API');
+    console.log("SECRETKEY inside API: ", config.SECRETKEY); // Thêm log để kiểm tra
+
     try {
         const { email, password } = req.body;
-        var checkUser = await userModel.find({ email: email, password: password });
+        var checkUser = await userModel.findOne({ email: email, password: password });
         if (checkUser) {
-            //Token người dùng sẽ sử dụng gửi lên trên header mỗi lần muốn gọi api
-            const token = JWT.sign({ id: email }, config.SECRETKEY, { expiresIn: '30s' });
-            //Khi token hết hạn, người dùng sẽ call 1 api khác để lấy token mới
-            //Lúc này người dùng sẽ truyền refreshToken lên để nhận về 1 cặp token, refreshToken mới
-            //Nếu cả 2 token đều hết hạn người dùng sẽ phải thoát app và đăng nhập lại
-
-            const refreshToken = JWT.sign({ id: email }, config.SECRETKEY, { expiresIn: '1h' });
+            console.log("User found, creating tokens...");
+            const token = JWT.sign({ id: checkUser._id }, config.SECRETKEY, { expiresIn: '30s' });
+            const refreshToken = JWT.sign({ id: checkUser._id }, config.SECRETKEY, { expiresIn: '1h' });
             res.status(200).json({ status: true, message: "Log-in successful", token: token, refreshToken: refreshToken });
         } else {
             res.status(402).json({ status: false, message: "User not found" });
         }
     } catch (error) {
+        console.log("Error: ", error); // Log lỗi để kiểm tra
         res.status(400).json({ status: false, message: "Log-in failed: " + error });
     }
 });
