@@ -89,10 +89,10 @@ router.post('/login', async function (req, res) {
             const refreshToken = JWT.sign({ id: email }, config.SECRETKEY, { expiresIn: '1h' });
             res.status(200).json({ status: true, message: "Log-in successful", token: token, refreshToken: refreshToken });
         } else {
-            res.status(402).json({ status: true, message: "User not found" });
+            res.status(402).json({ status: false, message: "User not found" });
         }
     } catch (error) {
-        res.status(400).json({ status: true, message: "Log-in failed: " + error });
+        res.status(400).json({ status: false, message: "Log-in failed: " + error });
     }
 });
 
