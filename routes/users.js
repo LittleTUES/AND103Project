@@ -98,8 +98,8 @@ router.post('/login', async function (req, res) {
             res.status(200).json({
                 status: true,
                 message: "Log-in successful",
-                token: token,
-                refreshToken: refreshToken
+                token: token2,
+                refreshToken: refreshToken2
             });
         } else {
             res.status(402).json({
