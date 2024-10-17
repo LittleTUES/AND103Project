@@ -87,11 +87,13 @@ router.post('/login', async function (req, res) {
         if (checkUser) {
             const token = JWT.sign({ id: email }, config.SECRETKEY, { expiresIn: '30s' });
             const token2 = JWT.sign({ id: email }, "TIENTQPS27928", { expiresIn: '30s' });
-            console.log(token);
+            console.log('token:', token);
+            console.log('token2:', token2);
             
             const refreshToken = JWT.sign({ id: email }, config.SECRETKEY, { expiresIn: '1h' });
             const refreshToken2 = JWT.sign({ id: email }, "TIENTQPS27928", { expiresIn: '1h' });
-            console.log(refreshToken);
+            console.log('refreshToken:', refreshToken);
+            console.log('refreshToken2:', refreshToken2);
             
             res.status(200).json({
                 status: true,
