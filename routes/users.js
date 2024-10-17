@@ -87,14 +87,14 @@ router.post('/login', async function (req, res) {
         var checkUser = await userModel.findOne({ email: email, password: password });
         if (checkUser) {
             const token = JWT.sign({ id: email }, config.SECRETKEY, { expiresIn: '30s' });
-            const token2 = JWT.sign({ id: email }, secretOrPrivateKey, { expiresIn: '30s' });
+            // const token2 = JWT.sign({ id: email }, secretOrPrivateKey, { expiresIn: '30s' });
             console.log('token:', token);
-            console.log('token2:', token2);
+            // console.log('token2:', token2);
             
             const refreshToken = JWT.sign({ id: email }, config.SECRETKEY, { expiresIn: '1h' });
-            const refreshToken2 = JWT.sign({ id: email }, secretOrPrivateKey, { expiresIn: '1h' });
+            // const refreshToken2 = JWT.sign({ id: email }, secretOrPrivateKey, { expiresIn: '1h' });
             console.log('refreshToken:', refreshToken);
-            console.log('refreshToken2:', refreshToken2);
+            // console.log('refreshToken2:', refreshToken2);
             
             res.status(200).json({
                 status: true,
