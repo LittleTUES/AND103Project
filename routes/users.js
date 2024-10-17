@@ -86,9 +86,13 @@ router.post('/login', async function (req, res) {
         var checkUser = await userModel.findOne({ email: email, password: password });
         if (checkUser) {
             const token = JWT.sign({ id: email }, config.SECRETKEY, { expiresIn: '30s' });
-
+            const token2 = JWT.sign({ id: email }, "TIENTQPS27928", { expiresIn: '30s' });
+            console.log(token);
+            
             const refreshToken = JWT.sign({ id: email }, config.SECRETKEY, { expiresIn: '1h' });
-
+            const refreshToken2 = JWT.sign({ id: email }, "TIENTQPS27928", { expiresIn: '1h' });
+            console.log(refreshToken);
+            
             res.status(200).json({
                 status: true,
                 message: "Log-in successful",
