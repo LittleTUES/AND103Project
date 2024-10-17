@@ -80,20 +80,20 @@ router.get('/', async function (req, res) {
  *         description: Tài khoản không tồn tại
  */
 console.log("SECRETKKEY:", config.SECRETKEY);
-
 router.post('/login', async function (req, res) {
     try {
         const { email, password } = req.body;
         var checkUser = await userModel.findOne({ email: email, password: password });
         if (checkUser) {
-            // const token = JWT.sign({ id: email }, config.SECRETKEY, { expiresIn: '30s' });
-            // const refreshToken = JWT.sign({ id: email }, config.SECRETKEY, { expiresIn: '1h' });
+            const token = JWT.sign({ id: email }, config.SECRETKEY, { expiresIn: '30s' });
+
+            const refreshToken = JWT.sign({ id: email }, config.SECRETKEY, { expiresIn: '1h' });
 
             res.status(200).json({
                 status: true,
                 message: "Log-in successful",
-                // token: token,
-                // refreshToken: refreshToken
+                token: token,
+                refreshToken: refreshToken
             });
         } else {
             res.status(402).json({
